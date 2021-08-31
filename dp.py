@@ -20,6 +20,7 @@ errlimit = 0.0001
 mapName = input("Map Name : ")
 env = Map(mapName)
 mat = [ [0]*env.m for _ in range(env.n) ]
+last = [ [0]*env.m for _ in range(env.n) ]
 for _ in range(1000):
     errmax = 0
     for y in range(env.n):
@@ -29,10 +30,11 @@ for _ in range(1000):
             t = 0
             for d in range(4):
                 nx, ny = env.move(x, y, d)
-                t += (-1+mat[ny][nx])*0.25
-            if abs(mat[y][x]-t) > errmax: errmax = abs(mat[y][x]-t)
+                t += (-1+last[ny][nx])*0.25
+            if abs(last[y][x]-t) > errmax: errmax = abs(last[y][x]-t)
             mat[y][x] = t
     if errmax <= errlimit: break
+    mat, last = last, mat
 
 for y in range(env.n):
     for x in range(env.m):
